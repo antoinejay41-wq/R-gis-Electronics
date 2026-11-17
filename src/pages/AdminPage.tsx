@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Database,
   DollarSign,
@@ -47,6 +47,11 @@ export const AdminPage: React.FC = () => {
   const [rateInput, setRateInput] = useState(String(snapshot.currencySettings.dopPerUsd));
   const [rateNote, setRateNote] = useState(snapshot.currencySettings.lastUpdatedNote);
   const [rateSaved, setRateSaved] = useState(false);
+
+  useEffect(() => {
+    setRateInput(String(snapshot.currencySettings.dopPerUsd));
+    setRateNote(snapshot.currencySettings.lastUpdatedNote);
+  }, [snapshot.currencySettings.dopPerUsd, snapshot.currencySettings.lastUpdatedNote]);
 
   // New Product form state
   const [newProdName, setNewProdName] = useState('');

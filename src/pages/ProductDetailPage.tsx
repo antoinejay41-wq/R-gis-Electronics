@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Heart, MessageCircle, ShoppingBag } from 'lucide-react';
 import { ResilientImage } from '../components/ResilientImage';
 import { useStore } from '../context/StoreContext';
@@ -25,6 +25,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ slug }) =>
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
     product?.variants[0]?.id ?? ''
   );
+
+  useEffect(() => {
+    setSelectedVariantId(product?.variants[0]?.id ?? '');
+  }, [product?.id]);
 
   if (!product) {
     return (

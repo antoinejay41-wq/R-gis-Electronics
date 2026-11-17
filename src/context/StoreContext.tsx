@@ -61,9 +61,17 @@ interface StoreContextValue {
 
 const StoreContext = createContext<StoreContextValue | null>(null);
 
+const normalizeRoutePath = (raw: string): string => {
+  const withLeadingSlash = raw.startsWith('/') ? raw : `/${raw}`;
+  if (withLeadingSlash.length > 1) {
+    return withLeadingSlash.replace(/\/+$/, '') || '/';
+  }
+  return withLeadingSlash || '/';
+};
+
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentPath, setCurrentPath] = useState<string>(() => {
-    return window.location.pathname || '/';
+    return normalizeRoutePath(window.location.pathname || '/');
   });
   const [language, setLanguageState] = useState<LanguageCode>(() => storeRepository.loadLanguage());
   const [currency, setCurrencyState] = useState<CurrencyCode>(() => storeRepository.loadCurrency());
@@ -76,7 +84,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   useEffect(() => {
     const onPopState = () => {
-      setCurrentPath(window.location.pathname || '/');
+      setCurrentPath(normalizeRoutePath(window.location.pathname || '/'));
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -84,8 +92,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const navigate = (path: string) => {
     const [rawPath, hash] = path.split('#');
-    const normalized = rawPath.startsWith('/') ? rawPath : `/${rawPath}`;
-    if (window.location.pathname !== normalized || hash) {
+    const normalized = normalizeRoutePath(rawPath);
+    if (normalizeRoutePath(window.location.pathname) !== normalized || hash) {
       window.history.pushState({}, '', hash ? `${normalized}#${hash}` : normalized);
       setCurrentPath(normalized);
     }

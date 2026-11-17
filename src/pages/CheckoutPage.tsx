@@ -58,11 +58,18 @@ export const CheckoutPage: React.FC = () => {
   useEffect(() => {
     setRegion('');
     setSelectedZoneId('');
-    setSelectedPickupId(activeLocations[0]?.id ?? '');
+  }, [country]);
+
+  useEffect(() => {
     if (!pickupSupported && fulfillmentType === 'pickup') {
       setFulfillmentType('delivery');
     }
-  }, [country, pickupSupported, activeLocations, fulfillmentType]);
+    if (activeLocations.length > 0 && !activeLocations.some((l) => l.id === selectedPickupId)) {
+      setSelectedPickupId(activeLocations[0].id);
+    } else if (activeLocations.length === 0 && selectedPickupId) {
+      setSelectedPickupId('');
+    }
+  }, [pickupSupported, fulfillmentType, activeLocations, selectedPickupId]);
 
   const selectedZone = countryZones.find((z) => z.id === selectedZoneId);
   const selectedPickup = activeLocations.find((l) => l.id === selectedPickupId);
