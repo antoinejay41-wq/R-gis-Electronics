@@ -1,0 +1,6 @@
+{
+  "name": "RÉGIS ELECTRONICS",
+  "description": "Electronics sales and repair services for the Dominican Republic and Haiti with dual-currency pricing (DOP/USD) and WhatsApp ordering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
